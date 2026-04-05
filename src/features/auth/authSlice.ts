@@ -30,7 +30,8 @@ const normalizeUser = (userData: any, token?: string): User | null => {
         name,
         email,
         token: token ?? userData.token ?? "",
-        provider: userData.provider,
+        providers: userData.providers,
+        avatar: userData.avatar,
     };
 };
 
@@ -74,7 +75,19 @@ export const googleLogin = createAsyncThunk(
             const response = await API.post('/auth/google', {
                 access_token,
             });
-            return response.data;
+            const responseData = response.data;
+            const payload = responseData.user ? responseData.user : responseData;
+            const token = payload.token ?? responseData.token;
+
+            if (token) {
+                localStorage.setItem('token', token);
+            }
+
+            const user = normalizeUser(payload, token);
+            if (user) {
+                localStorage.setItem('user', JSON.stringify(user));
+            }
+            return user;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || "Google login failed")
@@ -132,12 +145,12 @@ const authSlice = createSlice({
             })
             .addCase(googleLogin.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = {
-                    _id: action.payload._id,
-                    name: action.payload.name,
-                    email: action.payload.email,
-                    token: action.payload.token,
-                }
+                state.user = action.payload;
+                state.error = null;
+            })
+            .addCase(googleLogin.rejected, (state, action) => {
+                state.loading = false;
+                state.error = (action.payload as string) || action.error.message || 'Google login failed';
             })
     }
 })

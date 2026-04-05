@@ -102,9 +102,9 @@ const todosSlice = createSlice({
                 // Here we can handle any server response if needed
                 const { id, response } = action.payload;
                 const index = state.todos.findIndex(todo => todo._id === id);
-                if (index !== -1 && response) {
+                if (index !== -1 && response?.data) {
                     // Update with server response if it contains additional data
-                    state.todos[index] = { ...state.todos[index], ...response };
+                    state.todos[index] = { ...state.todos[index], ...response.data };
                 }
             })
             .addCase(toggleTodo.rejected, (state, action) => {

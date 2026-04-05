@@ -21,17 +21,20 @@ const Login = () => {
     }, [user, navigate]);
 
     const handleGoogleLogin = useGoogleLogin({
-        onSuccess: async(tokenResponse: { access_token: string; }) => {
+        scope: "openid email profile",  // 🔥 ADD THIS
+        onSuccess: async (tokenResponse) => {
+            console.log("TOKEN RESPONSE:", tokenResponse);
+
             try {
                 await dispatch(googleLogin(tokenResponse.access_token)).unwrap();
-                dispatch(showSnackbar({message: 'Login successful', severity: 'success'}));
+                dispatch(showSnackbar({ message: 'Login successful', severity: 'success' }));
                 navigate('/home', { replace: true });
             } catch (error) {
                 console.log('error', error);
-                dispatch(showSnackbar({message: 'Google login failed', severity: 'error'}));
+                dispatch(showSnackbar({ message: 'Google login failed', severity: 'error' }));
             }
         }
-    })
+    });
     return (
         <div className="flex flex-col items-center justify-center min-h-screen px-4">
             <div className="flex items-center gap-2 mb-6 justify-center">
