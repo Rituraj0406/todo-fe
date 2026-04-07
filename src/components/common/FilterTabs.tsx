@@ -19,7 +19,7 @@ const FilterTabs: React.FC<FilterTabsProps> = ({
             sx={{
                 display: "flex",
                 gap: "4px",
-                background: "#e5e7eb",
+                background: (theme) => theme.palette.mode === 'dark' ? "rgba(255,255,255,0.05)" : "#e5e7eb",
                 borderRadius: "10px",
                 p: "4px",
                 mb: 2
@@ -42,14 +42,14 @@ const FilterTabs: React.FC<FilterTabsProps> = ({
                             py: 0.6,
                             minWidth: 0,
 
-                            backgroundColor: isActive ? "#fff" : "transparent",
-                            color: isActive ? "#111827" : "#6b7280",
+                            backgroundColor: isActive ? (theme) => theme.palette.background.paper : "transparent",
+                            color: isActive ? "text.primary" : "text.secondary",
                             boxShadow: isActive
-                                ? "0 1px 4px rgba(0,0,0,0.1)"
+                                ? (theme) => theme.palette.mode === 'dark' ? "0 1px 4px rgba(0,0,0,0.4)" : "0 1px 4px rgba(0,0,0,0.1)"
                                 : "none",
 
                             "&:hover": {
-                                backgroundColor: isActive ? "#fff" : "#f3f4f6"
+                                backgroundColor: isActive ? (theme) => theme.palette.background.paper : (theme) => theme.palette.mode === 'dark' ? "rgba(255,255,255,0.1)" : "#f3f4f6"
                             }
                         }}
                     >

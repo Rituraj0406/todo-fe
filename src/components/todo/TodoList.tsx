@@ -1,9 +1,9 @@
 import React from "react";
 import { Box } from "@mui/material";
 import TodoItem from "./TodoItem";
-import EmptyState from "./todo/EmptyState";
-import type { FilterOption } from "./common/FilterTabs";
-import type { Todo } from "../features/todos/todoTypes";
+import EmptyState from "./EmptyState";
+import type { FilterOption } from "../common/FilterTabs";
+import type { Todo } from "../../features/todos/todoTypes";
 
 interface Props {
     todos: Todo[];

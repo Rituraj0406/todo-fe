@@ -50,7 +50,7 @@ const LoginForm = () => {
                         onBlur={formik.handleBlur}
                         required
                         placeholder='Email'
-                        className={`border p-2 w-full rounded ${formik.touched.email && formik.errors.email ? 'border-red-500' : 'border-gray-300'}`}
+                        className={`border p-2 w-full rounded dark:bg-gray-800 dark:border-gray-700 dark:text-white ${formik.touched.email && formik.errors.email ? 'border-red-500' : 'border-gray-300'}`}
                     />
                     {formik.touched.email && formik.errors.email && (
                         <div className="text-red-500 text-sm">{formik.errors.email}</div>
@@ -65,7 +65,7 @@ const LoginForm = () => {
                         placeholder='Password'
                         required
                         type='password'
-                        className={`border p-2 w-full rounded ${formik.touched.password && formik.errors.password ? 'border-red-500' : 'border-gray-300'}`}
+                        className={`border p-2 w-full rounded dark:bg-gray-800 dark:border-gray-700 dark:text-white ${formik.touched.password && formik.errors.password ? 'border-red-500' : 'border-gray-300'}`}
                     />
                     {formik.touched.password && formik.errors.password && (
                         <div className="text-red-500 text-sm">{formik.errors.password}</div>

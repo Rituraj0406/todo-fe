@@ -5,9 +5,15 @@ import {
     List,
     ListItem,
     ListItemButton,
-    Chip
+    Chip,
+    Switch,
+    useTheme,
+    Button
 } from "@mui/material";
-import { useAppSelector } from "../../hooks/reduxHooks";
+import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
+import { toggleTheme } from "../../features/theme/themeSlice";
+import LogoutIcon from '@mui/icons-material/Logout';
+import { logout } from "../../features/auth/authSlice";
 
 const drawerWidth = 260;
 
@@ -20,6 +26,9 @@ interface SidebarProps {
 
 export default function Sidebar({ mobileOpen, handleDrawerToggle, categoryFilter, setCategoryFilter }: SidebarProps) {
     const { counts } = useAppSelector(state => state.todos);
+    const { mode } = useAppSelector(state => state.theme);
+    const dispatch = useAppDispatch();
+    const theme = useTheme();
 
     const categories = [
         { name: "All", count: counts.all },
@@ -35,7 +44,7 @@ export default function Sidebar({ mobileOpen, handleDrawerToggle, categoryFilter
     ];
 
     const drawerContent = (
-        <>
+        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             {/* Header */}
             <Box mb={4}>
                 <Typography variant="h5" fontWeight="bold">
@@ -66,7 +75,7 @@ export default function Sidebar({ mobileOpen, handleDrawerToggle, categoryFilter
                                     background: categoryFilter === item.name.toLowerCase()
                                         ? "linear-gradient(90deg,#4f46e5,#6366f1)"
                                         : "transparent",
-                                    color: categoryFilter === item.name.toLowerCase() ? "#fff" : "#374151",
+                                    color: categoryFilter === item.name.toLowerCase() ? "#fff" : "text.primary",
                                     display: "flex",
                                     justifyContent: "space-between"
                                 }}
@@ -79,8 +88,8 @@ export default function Sidebar({ mobileOpen, handleDrawerToggle, categoryFilter
                                     sx={{
                                         background: categoryFilter === item.name.toLowerCase()
                                             ? "rgba(255,255,255,0.2)"
-                                            : "#e5e7eb",
-                                        color: categoryFilter === item.name.toLowerCase() ? "#fff" : "#374151"
+                                            : theme.palette.mode === 'dark' ? "rgba(255,255,255,0.1)" : "#e5e7eb",
+                                        color: categoryFilter === item.name.toLowerCase() ? "#fff" : "text.primary"
                                     }}
                                 />
                             </ListItemButton>
@@ -135,17 +144,37 @@ export default function Sidebar({ mobileOpen, handleDrawerToggle, categoryFilter
             <Box mt="auto">
                 <Box
                     sx={{
-                        border: "1px solid #e5e7eb",
+                        border: "1px solid",
+                        borderColor: "divider",
                         borderRadius: "12px",
                         padding: "10px",
-                        textAlign: "center",
-                        cursor: "pointer"
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between"
                     }}
                 >
-                    🌙 Dark mode
+                    <Typography variant="body2">
+                        {mode === 'dark' ? '🌙 Dark mode' : '☀️ Light mode'}
+                    </Typography>
+                    <Switch 
+                        checked={mode === 'dark'} 
+                        onChange={() => dispatch(toggleTheme())}
+                        size="small"
+                    />
                 </Box>
+                <Button
+                    endIcon={<LogoutIcon />}
+                    variant="contained"
+                    fullWidth
+                    onClick={() => dispatch(logout())}
+                    sx={{
+                        marginTop: 2
+                    }}
+                >
+                    Logout 
+                </Button>
             </Box>
-        </>
+        </Box>
     );
     return (
         <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
@@ -161,7 +190,7 @@ export default function Sidebar({ mobileOpen, handleDrawerToggle, categoryFilter
                         width: drawerWidth,
                         boxSizing: "border-box",
                         padding: "20px",
-                        background: "#f9fafb"
+                        background: theme.palette.background.default
                     }
                 }}
             >
@@ -177,7 +206,9 @@ export default function Sidebar({ mobileOpen, handleDrawerToggle, categoryFilter
                         width: drawerWidth,
                         boxSizing: "border-box",
                         padding: "20px",
-                        background: "#f9fafb"
+                        background: theme.palette.background.default,
+                        borderRight: "1px solid",
+                        borderColor: "divider"
                     }
                 }}
                 open

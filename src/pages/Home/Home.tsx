@@ -10,16 +10,18 @@ import {
     MenuItem,
     Select,
     Typography,
-    TextField
+    TextField,
+    useTheme
 } from "@mui/material";
 import Status from "../../components/common/Status";
 import SearchIcon from '@mui/icons-material/Search';
 import AddTodo from "../../components/todo/AddTodo";
 import FilterTabs, { type FilterOption } from "../../components/common/FilterTabs";
 import { sortByOptions } from "../../utils/helper";
-import TodoList from "../../components/TodoList";
+import TodoList from "../../components/todo/TodoList";
 
 function Home() {
+    const theme = useTheme();
     const { todos } = useAppSelector((state) => state.todos);
     const dispatch = useAppDispatch();
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -59,29 +61,29 @@ function Home() {
             const matchesSearch = todo.task
                 .toLowerCase()
                 .includes(search.toLowerCase());
-            const matchesFilter = 
+            const matchesFilter =
                 filter === "all"
                     ? true
-                    :filter === "completed"
-                    ? todo.completed
-                    : !todo.completed;
+                    : filter === "completed"
+                        ? todo.completed
+                        : !todo.completed;
             const matchesCategory = categoryFilter === "all"
                 ? true
                 : todo.category.toLowerCase() === categoryFilter;
-            return matchesSearch && matchesFilter && matchesCategory; 
+            return matchesSearch && matchesFilter && matchesCategory;
         })
         .sort((a, b) => {
-            if(sortBy === "newest") {
+            if (sortBy === "newest") {
                 return (
                     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                 );
             }
-            if(sortBy === "oldest") {
+            if (sortBy === "oldest") {
                 return (
                     new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
                 );
             }
-            if(sortBy === "priority") {
+            if (sortBy === "priority") {
                 const order: Record<string, number> = {
                     high: 0,
                     medium: 1,
@@ -92,28 +94,41 @@ function Home() {
             return 0;
         })
 
-    console.log(filteredTodos);
-
     const date = new Date().toLocaleDateString("en-IN", { weekday: "long", month: "long", day: "numeric" });
 
     return (
         <Box className="flex">
             {/* Sidebar */}
-            <Sidebar 
-                mobileOpen={mobileOpen} 
-                handleDrawerToggle={handleDrawerToggle} 
-                categoryFilter={categoryFilter} 
+            <Sidebar
+                mobileOpen={mobileOpen}
+                handleDrawerToggle={handleDrawerToggle}
+                categoryFilter={categoryFilter}
                 setCategoryFilter={setCategoryFilter}
             />
             {/* Main content Area */}
-            <Box component="main" className="flex-1 px-4 py-5 md:px-7 md:py-8 w-[calc(100%-240px)] h-screen overflow-y-auto">
+            <Box
+                component="main"
+                className="flex-1 px-4 py-5 md:px-7 md:py-8 w-[calc(100%-240px)] h-screen overflow-y-auto"
+                sx={{
+                    backgroundColor: theme.palette.background.default,
+                    color: theme.palette.text.primary,
+                }}
+            >
                 <div className='flex flex-col gap-6'>
                     <Box className="flex justify-between items-center w-full">
                         <Box>
-                            <Typography variant="h5" className="text-black font-extrabold mb-1">
+                            <Typography
+                                variant="h5"
+                                className="text-black dark:text-white font-extrabold mb-1"
+                                sx={{
+                                    fontWeight: 800,
+                                    mb: 1,
+                                    color: theme.palette.text.primary
+                                }}
+                            >
                                 All Tasks
                             </Typography>
-                            <Typography variant="caption" >
+                            <Typography variant="caption" color="text.secondary">
                                 {date}
                             </Typography>
                         </Box>
@@ -135,13 +150,13 @@ function Home() {
                                     // border styling
                                     "& .MuiOutlinedInput-notchedOutline": {
                                         borderRadius: "10px",
-                                        borderColor: "#e5e7eb"
+                                        borderColor: "divider"
                                     },
                                     "&:hover .MuiOutlinedInput-notchedOutline": {
-                                        borderColor: "#6366f1"
+                                        borderColor: "primary.main"
                                     },
                                     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                                        borderColor: "#4f46e5"
+                                        borderColor: "primary.main"
                                     }
                                 }}
                             >
@@ -164,16 +179,17 @@ function Home() {
                             minWidth: 220,
                             "& .MuiOutlinedInput-root": {
                                 borderRadius: "10px",
-                                background: "#f9fafb"
+                                backgroundColor: theme.palette.background.paper,
+                                transition: "all 0.2s ease"
                             },
                             "& .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#e5e7eb"
+                                borderColor: theme.palette.divider
                             },
                             "&:hover .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#6366f1"
+                                borderColor: theme.palette.primary.main
                             },
                             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#4f46e5"
+                                borderColor: theme.palette.primary.main
                             }
                         }}
                         slotProps={{

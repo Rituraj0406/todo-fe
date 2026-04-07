@@ -1,3 +1,4 @@
+import { useTheme } from "@mui/material";
 import type { Todo } from "../../features/todos/todoTypes";
 import CustomLinearProgress from "./CustomLinearProgress";
 
@@ -6,11 +7,16 @@ interface StatusProps {
 }
 
 function Status({ todos }: StatusProps) {
+    const theme = useTheme()
     const total = todos.length;
     const completed = todos.filter(todo => todo.completed).length;
     const pct = total === 0 ? 0 : Math.round((completed / total) * 100);
-    console.log('print:--', total, completed, pct)
     const progress = todos.length > 0 ? (todos.filter(todo => todo.completed).length / todos.length) * 100 : 0;
+
+    const trackColor =
+  theme.palette.mode === "dark"
+    ? "rgba(255,255,255,0.1)"
+    : "#e5e7eb";
     return (
         <div>
             <div className="flex justify-between items-center mb-2">
@@ -21,7 +27,7 @@ function Status({ todos }: StatusProps) {
                 <CustomLinearProgress height={8} variant="determinate"
                     value={progress}
                     barColor="#4f46e5"
-                    trackColor="#e5e7eb"
+                    trackColor={trackColor}
                 />
             </div>
         </div>

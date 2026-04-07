@@ -2,35 +2,64 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.css'
 // import TodoInput from './components/TodoInput'
 // import TodoList from './components/TodoList'
-// import { useAppSelector } from './hooks/reduxHooks';
+import { useAppSelector } from './hooks/reduxHooks';
 import Login from './pages/Login';
 import SignUp from './pages/Signup/index';
 import Home from './pages/Home/Home';
 import RequireAuth from './components/auth/RequiredAuth';
+import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { useMemo, useEffect } from 'react';
 
 function App() {
-  // const {todos} = useAppSelector((state) => state.todos);
+  const { mode } = useAppSelector((state) => state.theme);
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+          primary: {
+            main: '#0ea5e9', // Sky-500 equivalent
+          },
+          secondary: {
+            main: '#f43f5e', // Rose-500 equivalent
+          },
+        },
+      }),
+    [mode]
+  );
+
+  useEffect(() => {
+    if (mode === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [mode]);
 
   return (
-    <div className='min-h-screen flex flex-col'>
-      <Routes>
-        {/* public routes */}
-        <Route path='/' element={<Navigate to='/login' replace/>}/>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/signup' element={<SignUp/>}/>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <div className='min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-300'>
+        <Routes>
+          {/* public routes */}
+          <Route path='/' element={<Navigate to='/login' replace/>}/>
+          <Route path='/login' element={<Login/>}/>
+          <Route path='/signup' element={<SignUp/>}/>
 
-        <Route
-          path='/home'
-          element={
-            <RequireAuth>
-              <Home/>
-            </RequireAuth>
-          }
-        >
-          {/* protected routes */}
-        </Route>
-      </Routes>
-    </div>
+          <Route
+            path='/home'
+            element={
+              <RequireAuth>
+                <Home/>
+              </RequireAuth>
+            }
+          >
+            {/* protected routes */}
+          </Route>
+        </Routes>
+      </div>
+    </ThemeProvider>
   )
 }
 

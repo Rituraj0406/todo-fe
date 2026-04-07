@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { logout } from "../../features/auth/authSlice";
+import { toggleTheme } from "../../features/theme/themeSlice";
 import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -9,6 +10,8 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 
 
 const drawerWidth = 240;
@@ -21,6 +24,7 @@ const Navbar = ({ handleDrawerToggle }: NavbarProps) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { user } = useAppSelector((state) => state.auth);
+    const { mode } = useAppSelector((state) => state.theme);
 
 
     const handleLogout = () => {
@@ -48,12 +52,16 @@ const Navbar = ({ handleDrawerToggle }: NavbarProps) => {
                 >
                     <MenuIcon />
                 </IconButton>
-                <Box className="flex justify-between w-full">
+                <Box className="flex justify-between w-full items-center">
                     <Typography variant="h6" noWrap component="div">
                         tasks.
                     </Typography>
 
-                    <Box className="flex items-center">
+                    <Box className="flex items-center gap-4">
+                        <IconButton color="inherit" onClick={() => dispatch(toggleTheme())}>
+                            {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+                        </IconButton>
+
                         {user && (
                             <Avatar
                                 sx={{
@@ -70,7 +78,7 @@ const Navbar = ({ handleDrawerToggle }: NavbarProps) => {
                                 {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
                             </Avatar>
                         )}
-                        <Button variant="contained" color="secondary" onClick={handleLogout} sx={{ ml: 2 }}>
+                        <Button variant="contained" color="secondary" onClick={handleLogout}>
                             Logout
                         </Button>
                     </Box>

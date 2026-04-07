@@ -5,14 +5,15 @@ import {
     Checkbox,
     IconButton,
     Chip,
-    TextField
+    TextField,
+    useTheme
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import type { Todo } from "../features/todos/todoTypes";
+import type { Todo } from "../../features/todos/todoTypes";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { formatDate } from "../utils/helper";
+import { formatDate } from "../../utils/helper";
 
 interface Props {
     todo: Todo;
@@ -21,29 +22,30 @@ interface Props {
     onEdit: (id: string, text: string) => void;
 }
 
-const categoryColors: Record<string, string> = {
-    Work: "#3b5bdb",
-    Learning: "#0ca678",
-    Personal: "#f76707"
-};
-
-const priorityColors: Record<string, string> = {
-    High: "#ef4444",
-    Medium: "#f59e0b",
-    Low: "#22c55e"
-};
-
 const TodoItem: React.FC<Props> = ({
     todo,
     onToggle,
     onDelete,
     onEdit
 }) => {
+    const theme = useTheme();
     const [hovered, setHovered] = useState(false);
     const [editing, setEditing] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const [editText, setEditText] = useState(todo.task);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const categoryColors: Record<string, string> = {
+        Work: theme.palette.mode === 'dark' ? "#4dabf7" : "#3b5bdb",
+        Learning: theme.palette.mode === 'dark' ? "#63e6be" : "#0ca678",
+        Personal: theme.palette.mode === 'dark' ? "#ff922b" : "#f76707"
+    };
+
+    const priorityColors: Record<string, string> = {
+        High: "#ef4444",
+        Medium: "#f59e0b",
+        Low: "#22c55e"
+    };
 
     useEffect(() => {
         if (editing) inputRef.current?.focus();
@@ -70,15 +72,16 @@ const TodoItem: React.FC<Props> = ({
                 gap: 1.5,
                 p: 2,
                 borderRadius: "12px",
-                border: "1px solid #e5e7eb",
+                border: "1px solid",
+                borderColor: "divider",
                 mb: 1,
-                background: "#fff",
+                background: theme.palette.background.paper,
                 transition: "all 0.25s ease",
                 opacity: deleting ? 0 : 1,
                 transform: deleting
                     ? "translateX(40px) scale(0.95)"
                     : "none",
-                boxShadow: hovered ? "0 4px 20px rgba(0,0,0,0.08)" : "none"
+                boxShadow: hovered ? theme.palette.mode === 'dark' ? "0 4px 20px rgba(0,0,0,0.4)" : "0 4px 20px rgba(0,0,0,0.08)" : "none"
             }}
         >
             <Checkbox
@@ -87,9 +90,9 @@ const TodoItem: React.FC<Props> = ({
                 icon={<RadioButtonUncheckedIcon />}
                 checkedIcon={<CheckCircleIcon />}
                 sx={{
-                    color: "#9ca3af", // unchecked color
+                    color: "text.disabled",
                     "&.Mui-checked": {
-                        color: "#6366f1" // checked color (your theme)
+                        color: "primary.main"
                     }
                 }}
             />

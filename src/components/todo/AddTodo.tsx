@@ -6,7 +6,8 @@ import {
     Button,
     Typography,
     Chip,
-    Collapse
+    Collapse,
+    useTheme
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -31,6 +32,7 @@ export default function AddTodo({ onAdd }: AddTodoProps) {
     const [category, setCategory] = useState<"Work" | "Learning" | "Personal">("Work");
     const [priority, setPriority] = useState<"High" | "Medium" | "Low">("Medium");
     const [expanded, setExpanded] = useState(false);
+    const theme = useTheme();
 
     const handleSubmit = () => {
         if (!task.trim()) return;
@@ -43,17 +45,18 @@ export default function AddTodo({ onAdd }: AddTodoProps) {
         <Box
             sx={{
                 border: "1.5px solid",
-                borderColor: expanded ? "#6366f1" : "#e5e7eb",
+                borderColor: expanded ? "primary.main" : "divider",
                 borderRadius: "14px",
                 p: 1.5,
                 transition: "all 0.2s ease",
-                boxShadow: expanded ? "0 0 0 3px rgba(99,102,241,0.2)" : "none",
-                mb: 3
+                boxShadow: expanded ? `0 0 0 3px ${theme.palette.primary.main}33` : "none",
+                mb: 3,
+                background: theme.palette.mode === 'dark' ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.01)"
             }}
         >
             {/* Input Row */}
             <Box display="flex" alignItems="center" gap={1}>
-                <AddIcon sx={{ color: "#6366f1" }} />
+                <AddIcon sx={{ color: "primary.main" }} />
 
                 <TextField
                     fullWidth
@@ -91,7 +94,7 @@ export default function AddTodo({ onAdd }: AddTodoProps) {
                 <Box
                     mt={2}
                     pt={1.5}
-                    borderTop="1px solid #e5e7eb"
+                    sx={{ borderTop: "1px solid", borderColor: "divider" }}
                     display="flex"
                     gap={3}
                     flexWrap="wrap"
@@ -134,7 +137,10 @@ export default function AddTodo({ onAdd }: AddTodoProps) {
                                         borderColor: p.color,
                                         color: priority === p.id ? "#fff" : p.color,
                                         background:
-                                            priority === p.id ? p.color : "transparent"
+                                            priority === p.id ? p.color : "transparent",
+                                        "&:hover": {
+                                            background: priority === p.id ? p.color : theme.palette.mode === 'dark' ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)"
+                                        }
                                     }}
                                 />
                             ))}
