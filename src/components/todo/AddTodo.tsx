@@ -81,7 +81,9 @@ export default function AddTodo({ onAdd }: AddTodoProps) {
                         onClick={handleSubmit}
                         sx={{
                             textTransform: "none",
-                            borderRadius: "8px"
+                            borderRadius: "8px",
+                            background: 'linear-gradient(90deg,#4f46e5,#6366f1)',
+                            fontWeight: 600
                         }}
                     >
                         Add

@@ -26,7 +26,8 @@ const StyledLinearProgress = styled(LinearProgress, {
 
   [`& .${linearProgressClasses.bar}`]: {
     borderRadius: 5,
-    backgroundColor: barColor || theme.palette.primary.main,
+    backgroundColor: barColor?.startsWith('linear-gradient') ? 'transparent' : (barColor || theme.palette.primary.main),
+    backgroundImage: barColor?.startsWith('linear-gradient') ? barColor : 'none',
   },
 }));
 

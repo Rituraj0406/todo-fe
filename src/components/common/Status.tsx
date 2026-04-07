@@ -26,7 +26,7 @@ function Status({ todos }: StatusProps) {
             <div>
                 <CustomLinearProgress height={8} variant="determinate"
                     value={progress}
-                    barColor="#4f46e5"
+                    barColor="linear-gradient(90deg,#4f46e5,#6366f1)"
                     trackColor={trackColor}
                 />
             </div>
