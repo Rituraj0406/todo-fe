@@ -77,7 +77,7 @@ const LoginForm = () => {
                 >
                     Forgot Password?
                 </Link> */}
-                <div>
+                <div className='flex justify-center'>
                     <button type='submit' disabled={formik.isSubmitting} className='bg-sky-500 text-white rounded-md px-5 py-1 hover:transform hover:scale-105 transition-transform duration-200 cursor-pointer'>
                         {formik.isSubmitting ? 'Logging in...' : 'Login'}
                     </button>

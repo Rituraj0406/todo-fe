@@ -5,8 +5,8 @@ import './App.css'
 // import { useAppSelector } from './hooks/reduxHooks';
 import Login from './pages/Login';
 import SignUp from './pages/Signup/index';
-import RequireAuth from './components/auth/REquiredAuth';
 import Home from './pages/Home/Home';
+import RequireAuth from './components/auth/RequiredAuth';
 
 function App() {
   // const {todos} = useAppSelector((state) => state.todos);
@@ -31,13 +31,6 @@ function App() {
         </Route>
       </Routes>
     </div>
-    // <div className='max-w-115 mx-auto flex flex-col gap-2'>
-    //   <h1 className='text-3xl font-bold text-center mb-6 mt-4'>Todo Tasks</h1>
-    //   <TodoInput/>
-    //   <TodoList
-    //     todo={todos}
-    //   />
-    // </div>
   )
 }
 

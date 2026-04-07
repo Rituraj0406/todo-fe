@@ -1,26 +1,48 @@
-// import { DUMMY_Todos } from "../data/dummy";
-import type { Todo } from "../features/todos/todoTypes";
+import React from "react";
+import { Box } from "@mui/material";
 import TodoItem from "./TodoItem";
+import EmptyState from "./todo/EmptyState";
+import type { FilterOption } from "./common/FilterTabs";
+import type { Todo } from "../features/todos/todoTypes";
 
-interface TodoListPropTypes {
-    todo: Todo[];
+interface Props {
+    todos: Todo[];
+    filter: FilterOption;
+    onToggle: (id: string) => void;
+    onDelete: (id: string) => void;
+    onEdit: (id: string, text: string) => void;
 }
 
-const TodoList = ({todo}: TodoListPropTypes) => {
-    if (!Array.isArray(todo)) {
-        return <div>No todos available</div>;
+const TodoList: React.FC<Props> = ({
+    todos,
+    filter,
+    onToggle,
+    onDelete,
+    onEdit
+}) => {
+    if (todos.length === 0) {
+        return <EmptyState filter={filter} />;
     }
 
     return (
-        <div className="">
-            {todo.map((todo, index) => (
-                <TodoItem
-                    key={todo._id || index}
-                    todo={todo}
-                />
+        <Box>
+            {todos.map((todo, i) => (
+                <Box
+                    key={todo._id}
+                    sx={{
+                        animation: `fadeUp 0.3s ease ${i * 0.04}s both`
+                    }}
+                >
+                    <TodoItem
+                        todo={todo}
+                        onToggle={onToggle}
+                        onDelete={onDelete}
+                        onEdit={onEdit}
+                    />
+                </Box>
             ))}
-        </div>
-    )
-}
+        </Box>
+    );
+};
 
 export default TodoList;
