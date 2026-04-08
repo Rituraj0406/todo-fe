@@ -3,12 +3,16 @@ import './App.css'
 // import TodoInput from './components/TodoInput'
 // import TodoList from './components/TodoList'
 import { useAppSelector } from './hooks/reduxHooks';
-import Login from './pages/Login';
+// import Login from './pages/Login';
 import SignUp from './pages/Signup/index';
-import Home from './pages/Home/Home';
+// import Home from './pages/Home/Home';
 import RequireAuth from './components/auth/RequiredAuth';
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import { useMemo, useEffect } from 'react';
+import React from 'react';
+
+const Home = React.lazy(() => import('./pages/Home/Home'));
+const Login = React.lazy(() => import('./pages/Login'));
 
 function App() {
   const { mode } = useAppSelector((state) => state.theme);
